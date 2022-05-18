@@ -52,6 +52,10 @@ declare module "hardhat/types/runtime" {
       name: "MetaN1",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.MetaN1__factory>;
+    getContractFactory(
+      name: "Operators",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.Operators__factory>;
 
     getContractAt(
       name: "Ownable",
@@ -103,6 +107,11 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.MetaN1>;
+    getContractAt(
+      name: "Operators",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.Operators>;
 
     // default types
     getContractFactory(

@@ -2,14 +2,13 @@
 
 pragma solidity ^0.8.0;
 
-import '@openzeppelin/contracts/access/Ownable.sol';
 import '@openzeppelin/contracts/token/ERC721/ERC721.sol';
 import '@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol';
-
 import '@openzeppelin/contracts/utils/math/SafeMath.sol';
 import '@openzeppelin/contracts/utils/Strings.sol';
+import './Operators.sol';
 
-contract MetaN1 is ERC721Enumerable, Ownable {
+contract MetaN1 is ERC721Enumerable, Operators {
 	using SafeMath for uint256;
 	using Strings for uint256;
 
@@ -46,11 +45,13 @@ contract MetaN1 is ERC721Enumerable, Ownable {
 
 	constructor(
 		address newOwner,
+		address operator,
 		string memory _baseURI,
 		uint256 _openTime,
 		uint256 _supply
 	) ERC721('Meta N1', 'meta N') {
 		_transferOwnership(newOwner);
+		_addOperator(operator);
 		_setBaseURI(_baseURI);
 		_setOpenTime(_openTime);
 		_setSupply(_supply);
@@ -66,21 +67,21 @@ contract MetaN1 is ERC721Enumerable, Ownable {
 		isClaimed[to] = true;
 	}
 
-	function ownerMint(address to, uint256 amount) external onlyOwner {
+	function operatorMint(address to, uint256 amount) external onlyOperator {
 		for (uint256 i = 0; i < amount; i++) {
 			_randMint(to);
 		}
 	}
 
-	function updateWhiteList(address[] memory _whiteList, bool isWhite) external onlyOwner {
+	function updateWhiteList(address[] memory _whiteList, bool isWhite) external onlyOperator {
 		_updateWhiteList(_whiteList, isWhite);
 	}
 
-	function setOpenTime(uint256 time) external onlyOwner {
+	function setOpenTime(uint256 time) external onlyOperator {
 		_setOpenTime(time);
 	}
 
-	function setBaseURI(string memory _baseURI) external onlyOwner {
+	function setBaseURI(string memory _baseURI) external onlyOperator {
 		_setBaseURI(_baseURI);
 	}
 

@@ -21,6 +21,7 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface MetaN1Interface extends ethers.utils.Interface {
   functions: {
+    "addOperator(address)": FunctionFragment;
     "approve(address,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
     "baseURI()": FunctionFragment;
@@ -28,13 +29,16 @@ interface MetaN1Interface extends ethers.utils.Interface {
     "getApproved(uint256)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
     "isClaimed(address)": FunctionFragment;
+    "isOperator(address)": FunctionFragment;
     "mint()": FunctionFragment;
     "name()": FunctionFragment;
     "openTime()": FunctionFragment;
+    "operatorMint(address,uint256)": FunctionFragment;
+    "operators(address)": FunctionFragment;
     "owner()": FunctionFragment;
-    "ownerMint(address,uint256)": FunctionFragment;
     "ownerOf(uint256)": FunctionFragment;
     "remains()": FunctionFragment;
+    "removeOperator(address)": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "safeTransferFrom(address,address,uint256)": FunctionFragment;
     "setApprovalForAll(address,bool)": FunctionFragment;
@@ -54,6 +58,7 @@ interface MetaN1Interface extends ethers.utils.Interface {
     "whiteList(address)": FunctionFragment;
   };
 
+  encodeFunctionData(functionFragment: "addOperator", values: [string]): string;
   encodeFunctionData(
     functionFragment: "approve",
     values: [string, BigNumberish]
@@ -70,19 +75,25 @@ interface MetaN1Interface extends ethers.utils.Interface {
     values: [string, string]
   ): string;
   encodeFunctionData(functionFragment: "isClaimed", values: [string]): string;
+  encodeFunctionData(functionFragment: "isOperator", values: [string]): string;
   encodeFunctionData(functionFragment: "mint", values?: undefined): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
   encodeFunctionData(functionFragment: "openTime", values?: undefined): string;
-  encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "ownerMint",
+    functionFragment: "operatorMint",
     values: [string, BigNumberish]
   ): string;
+  encodeFunctionData(functionFragment: "operators", values: [string]): string;
+  encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "ownerOf",
     values: [BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "remains", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "removeOperator",
+    values: [string]
+  ): string;
   encodeFunctionData(
     functionFragment: "renounceOwnership",
     values?: undefined
@@ -137,6 +148,10 @@ interface MetaN1Interface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "whiteList", values: [string]): string;
 
+  decodeFunctionResult(
+    functionFragment: "addOperator",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "baseURI", data: BytesLike): Result;
@@ -150,13 +165,22 @@ interface MetaN1Interface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "isClaimed", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "isOperator", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "mint", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "openTime", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "operatorMint",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "operators", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "ownerMint", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "ownerOf", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "remains", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "removeOperator",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "renounceOwnership",
     data: BytesLike
@@ -209,27 +233,33 @@ interface MetaN1Interface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "whiteList", data: BytesLike): Result;
 
   events: {
+    "AddOperator(address)": EventFragment;
     "Approval(address,address,uint256)": EventFragment;
     "ApprovalForAll(address,address,bool)": EventFragment;
     "BaseURIUpdated(string)": EventFragment;
     "OpenTimeUpdated(uint256)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
     "RemainsUpdated(uint256)": EventFragment;
+    "RemoveOperator(address)": EventFragment;
     "SupplyUpdated(uint256)": EventFragment;
     "Transfer(address,address,uint256)": EventFragment;
     "WhiteListUpdated(address,bool)": EventFragment;
   };
 
+  getEvent(nameOrSignatureOrTopic: "AddOperator"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Approval"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ApprovalForAll"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "BaseURIUpdated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OpenTimeUpdated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "RemainsUpdated"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "RemoveOperator"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "SupplyUpdated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Transfer"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "WhiteListUpdated"): EventFragment;
 }
+
+export type AddOperatorEvent = TypedEvent<[string] & { to: string }>;
 
 export type ApprovalEvent = TypedEvent<
   [string, string, BigNumber] & {
@@ -260,6 +290,8 @@ export type OwnershipTransferredEvent = TypedEvent<
 export type RemainsUpdatedEvent = TypedEvent<
   [BigNumber] & { remains: BigNumber }
 >;
+
+export type RemoveOperatorEvent = TypedEvent<[string] & { to: string }>;
 
 export type SupplyUpdatedEvent = TypedEvent<
   [BigNumber] & { supply: BigNumber }
@@ -317,6 +349,11 @@ export class MetaN1 extends BaseContract {
   interface: MetaN1Interface;
 
   functions: {
+    addOperator(
+      to: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     approve(
       to: string,
       tokenId: BigNumberish,
@@ -345,6 +382,8 @@ export class MetaN1 extends BaseContract {
 
     isClaimed(arg0: string, overrides?: CallOverrides): Promise<[boolean]>;
 
+    isOperator(to: string, overrides?: CallOverrides): Promise<[boolean]>;
+
     mint(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
@@ -353,13 +392,15 @@ export class MetaN1 extends BaseContract {
 
     openTime(overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    owner(overrides?: CallOverrides): Promise<[string]>;
-
-    ownerMint(
+    operatorMint(
       to: string,
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
+
+    operators(arg0: string, overrides?: CallOverrides): Promise<[boolean]>;
+
+    owner(overrides?: CallOverrides): Promise<[string]>;
 
     ownerOf(
       tokenId: BigNumberish,
@@ -367,6 +408,11 @@ export class MetaN1 extends BaseContract {
     ): Promise<[string]>;
 
     remains(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    removeOperator(
+      to: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
 
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -453,6 +499,11 @@ export class MetaN1 extends BaseContract {
     whiteList(arg0: string, overrides?: CallOverrides): Promise<[boolean]>;
   };
 
+  addOperator(
+    to: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   approve(
     to: string,
     tokenId: BigNumberish,
@@ -481,6 +532,8 @@ export class MetaN1 extends BaseContract {
 
   isClaimed(arg0: string, overrides?: CallOverrides): Promise<boolean>;
 
+  isOperator(to: string, overrides?: CallOverrides): Promise<boolean>;
+
   mint(
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
@@ -489,17 +542,24 @@ export class MetaN1 extends BaseContract {
 
   openTime(overrides?: CallOverrides): Promise<BigNumber>;
 
-  owner(overrides?: CallOverrides): Promise<string>;
-
-  ownerMint(
+  operatorMint(
     to: string,
     amount: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  operators(arg0: string, overrides?: CallOverrides): Promise<boolean>;
+
+  owner(overrides?: CallOverrides): Promise<string>;
+
   ownerOf(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
   remains(overrides?: CallOverrides): Promise<BigNumber>;
+
+  removeOperator(
+    to: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
   renounceOwnership(
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -583,6 +643,8 @@ export class MetaN1 extends BaseContract {
   whiteList(arg0: string, overrides?: CallOverrides): Promise<boolean>;
 
   callStatic: {
+    addOperator(to: string, overrides?: CallOverrides): Promise<void>;
+
     approve(
       to: string,
       tokenId: BigNumberish,
@@ -608,23 +670,29 @@ export class MetaN1 extends BaseContract {
 
     isClaimed(arg0: string, overrides?: CallOverrides): Promise<boolean>;
 
+    isOperator(to: string, overrides?: CallOverrides): Promise<boolean>;
+
     mint(overrides?: CallOverrides): Promise<void>;
 
     name(overrides?: CallOverrides): Promise<string>;
 
     openTime(overrides?: CallOverrides): Promise<BigNumber>;
 
-    owner(overrides?: CallOverrides): Promise<string>;
-
-    ownerMint(
+    operatorMint(
       to: string,
       amount: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
+    operators(arg0: string, overrides?: CallOverrides): Promise<boolean>;
+
+    owner(overrides?: CallOverrides): Promise<string>;
+
     ownerOf(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
     remains(overrides?: CallOverrides): Promise<BigNumber>;
+
+    removeOperator(to: string, overrides?: CallOverrides): Promise<void>;
 
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
@@ -701,6 +769,12 @@ export class MetaN1 extends BaseContract {
   };
 
   filters: {
+    "AddOperator(address)"(
+      to?: null
+    ): TypedEventFilter<[string], { to: string }>;
+
+    AddOperator(to?: null): TypedEventFilter<[string], { to: string }>;
+
     "Approval(address,address,uint256)"(
       owner?: string | null,
       approved?: string | null,
@@ -775,6 +849,12 @@ export class MetaN1 extends BaseContract {
       remains?: null
     ): TypedEventFilter<[BigNumber], { remains: BigNumber }>;
 
+    "RemoveOperator(address)"(
+      to?: null
+    ): TypedEventFilter<[string], { to: string }>;
+
+    RemoveOperator(to?: null): TypedEventFilter<[string], { to: string }>;
+
     "SupplyUpdated(uint256)"(
       supply?: null
     ): TypedEventFilter<[BigNumber], { supply: BigNumber }>;
@@ -813,6 +893,11 @@ export class MetaN1 extends BaseContract {
   };
 
   estimateGas: {
+    addOperator(
+      to: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     approve(
       to: string,
       tokenId: BigNumberish,
@@ -841,6 +926,8 @@ export class MetaN1 extends BaseContract {
 
     isClaimed(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
+    isOperator(to: string, overrides?: CallOverrides): Promise<BigNumber>;
+
     mint(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
@@ -849,13 +936,15 @@ export class MetaN1 extends BaseContract {
 
     openTime(overrides?: CallOverrides): Promise<BigNumber>;
 
-    owner(overrides?: CallOverrides): Promise<BigNumber>;
-
-    ownerMint(
+    operatorMint(
       to: string,
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
+
+    operators(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
+
+    owner(overrides?: CallOverrides): Promise<BigNumber>;
 
     ownerOf(
       tokenId: BigNumberish,
@@ -863,6 +952,11 @@ export class MetaN1 extends BaseContract {
     ): Promise<BigNumber>;
 
     remains(overrides?: CallOverrides): Promise<BigNumber>;
+
+    removeOperator(
+      to: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
 
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -950,6 +1044,11 @@ export class MetaN1 extends BaseContract {
   };
 
   populateTransaction: {
+    addOperator(
+      to: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
     approve(
       to: string,
       tokenId: BigNumberish,
@@ -984,6 +1083,11 @@ export class MetaN1 extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    isOperator(
+      to: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     mint(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
@@ -992,13 +1096,18 @@ export class MetaN1 extends BaseContract {
 
     openTime(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    ownerMint(
+    operatorMint(
       to: string,
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
+
+    operators(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     ownerOf(
       tokenId: BigNumberish,
@@ -1006,6 +1115,11 @@ export class MetaN1 extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     remains(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    removeOperator(
+      to: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
 
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
