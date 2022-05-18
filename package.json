@@ -1,9 +1,9 @@
 {
-	"name": "metan-contracts",
+	"name": "metan1",
 	"version": "0.1.0",
 	"description": "Meta N1 contracts",
 	"main": "./types/index.js",
-	"types": "./types/index.d.ts",
+	"types": "./types/index.ts",
 	"engines": {
 		"node": ">= 12.18.0"
 	},
