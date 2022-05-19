@@ -1,9 +1,0 @@
-# SafeWallet
-
-
-
-> SafeWallet contract
-
-
-## Functions
-

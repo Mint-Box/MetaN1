@@ -1,8 +1,0 @@
-# ResourceData
-
-
-
-> resource data library
-
-
-

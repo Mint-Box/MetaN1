@@ -1,9 +1,0 @@
-# ContractProxy
-
-
-
-> proxy contract
-
-
-## Functions
-
