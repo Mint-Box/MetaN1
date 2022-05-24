@@ -104,7 +104,7 @@ contract MetaN1 is ERC721Enumerable, Operators {
 
 	function rands() internal view returns (uint256) {
 		uint256 rand = uint256(keccak256(abi.encodePacked(nonce, blockhash(block.number), msg.sender)));
-		return (rand % remains) + 1;
+		return (rand % remains).add(1);
 	}
 
 	function _updateWhiteList(address[] memory _whiteList, bool isWhite) internal {
@@ -145,7 +145,7 @@ contract MetaN1 is ERC721Enumerable, Operators {
 
 	function tokenURI(uint256 tokenId) public view override returns (string memory) {
 		require(_exists(tokenId), 'Meta N1: URI query for nonexistent token');
-		return string(abi.encodePacked(baseURI, tokenId.toString()));
+		return string(abi.encodePacked(baseURI, tokenId.toString(), '.json'));
 	}
 
 	function burn(uint256 tokenId) public {

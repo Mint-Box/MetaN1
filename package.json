@@ -1,6 +1,6 @@
 {
 	"name": "metan1",
-	"version": "0.1.1",
+	"version": "0.1.3",
 	"description": "Meta N1 contracts",
 	"main": "./types/index.js",
 	"types": "./types/index.ts",
