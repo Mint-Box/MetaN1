@@ -39,7 +39,7 @@ contract MetaN1 is ERC721Enumerable, Operators {
 	event BaseURIUpdated(string uri);
 
 	modifier isOpen() {
-		require(openTime >= block.timestamp, 'Meta N1: sale is not open');
+		require(openTime <= block.timestamp, 'Meta N1: sale is not open');
 		_;
 	}
 
