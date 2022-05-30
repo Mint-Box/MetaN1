@@ -29,6 +29,7 @@ interface MetaN1Interface extends ethers.utils.Interface {
     "getApproved(uint256)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
     "isClaimed(address)": FunctionFragment;
+    "isOpen()": FunctionFragment;
     "isOperator(address)": FunctionFragment;
     "mint()": FunctionFragment;
     "name()": FunctionFragment;
@@ -75,6 +76,7 @@ interface MetaN1Interface extends ethers.utils.Interface {
     values: [string, string]
   ): string;
   encodeFunctionData(functionFragment: "isClaimed", values: [string]): string;
+  encodeFunctionData(functionFragment: "isOpen", values?: undefined): string;
   encodeFunctionData(functionFragment: "isOperator", values: [string]): string;
   encodeFunctionData(functionFragment: "mint", values?: undefined): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
@@ -165,6 +167,7 @@ interface MetaN1Interface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "isClaimed", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "isOpen", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "isOperator", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "mint", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
@@ -382,6 +385,8 @@ export class MetaN1 extends BaseContract {
 
     isClaimed(arg0: string, overrides?: CallOverrides): Promise<[boolean]>;
 
+    isOpen(overrides?: CallOverrides): Promise<[boolean]>;
+
     isOperator(to: string, overrides?: CallOverrides): Promise<[boolean]>;
 
     mint(
@@ -532,6 +537,8 @@ export class MetaN1 extends BaseContract {
 
   isClaimed(arg0: string, overrides?: CallOverrides): Promise<boolean>;
 
+  isOpen(overrides?: CallOverrides): Promise<boolean>;
+
   isOperator(to: string, overrides?: CallOverrides): Promise<boolean>;
 
   mint(
@@ -669,6 +676,8 @@ export class MetaN1 extends BaseContract {
     ): Promise<boolean>;
 
     isClaimed(arg0: string, overrides?: CallOverrides): Promise<boolean>;
+
+    isOpen(overrides?: CallOverrides): Promise<boolean>;
 
     isOperator(to: string, overrides?: CallOverrides): Promise<boolean>;
 
@@ -926,6 +935,8 @@ export class MetaN1 extends BaseContract {
 
     isClaimed(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
+    isOpen(overrides?: CallOverrides): Promise<BigNumber>;
+
     isOperator(to: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     mint(
@@ -1082,6 +1093,8 @@ export class MetaN1 extends BaseContract {
       arg0: string,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
+
+    isOpen(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     isOperator(
       to: string,

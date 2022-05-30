@@ -38,8 +38,8 @@ contract MetaN1 is ERC721Enumerable, Operators {
 
 	event BaseURIUpdated(string uri);
 
-	modifier isOpen() {
-		require(openTime <= block.timestamp, 'Meta N1: sale is not open');
+	modifier onlyOpen() {
+		require(isOpen(), 'Meta N1: sale is not open');
 		_;
 	}
 
@@ -59,7 +59,7 @@ contract MetaN1 is ERC721Enumerable, Operators {
 		nonce = block.number;
 	}
 
-	function mint() external isOpen {
+	function mint() external onlyOpen {
 		address to = msg.sender;
 		require(whiteList[to], 'Meta N1: caller is not in the white list');
 		require(!isClaimed[to], 'Meta N1: token has been claimed');
@@ -144,8 +144,13 @@ contract MetaN1 is ERC721Enumerable, Operators {
 	}
 
 	function tokenURI(uint256 tokenId) public view override returns (string memory) {
+		require(isOpen(), 'Meta N1: sale is not open');
 		require(_exists(tokenId), 'Meta N1: URI query for nonexistent token');
 		return string(abi.encodePacked(baseURI, tokenId.toString(), '.json'));
+	}
+
+	function isOpen() public view returns(bool) {
+		return openTime <= block.timestamp;
 	}
 
 	function burn(uint256 tokenId) public {
